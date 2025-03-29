@@ -2,7 +2,7 @@
 
 This repository contains the code to train the depth completion network, generate 3D scenes, and run the scene geometry evaluation benchmark 
 
-Abstract: *3D scene generation has quickly become a challenging new research direction, fueled by consistent improvements of 2D generative diffusion models. Most prior work in this area generates scenes by iteratively stitching newly generated frames with existing geometry.  These works often depend on pre-trained monocular depth estimators to lift the generated images into 3D, fusing them with the existing scene representation. These approaches are then often evaluated via a text metric, measuring the similarity between the generated images and a given text prompt. In this work, we make two fundamental contributions to the field of 3D scene generation. First, we note that lifting images to 3D with a monocular depth estimation model is suboptimal as it ignores the geometry of the existing scene. We thus introduce a novel depth completion model, trained via teacher distillation and self-training to learn the 3D fusion process, resulting in improved geometric coherence of the scene. Second, we introduce a new benchmarking scheme for scene generation methods that is based on ground truth geometry, and thus measures the quality of the structure of the scene.*
+Overview: We present two key advancements in 3D scene generation, a field rapidly evolving due to progress in 2D diffusion models. First, we identify and rectify the limitations of monocular depth estimation for 3D lifting, by introducing a depth completion model that integrates existing scene geometry through teacher distillation and self-training, resulting in superior geometric consistency. Second, we establish a geometry-centric benchmarking scheme, replacing text-based evaluations, to directly quantify the structural fidelity of generated 3D scenes.
 
 ## Release Roadmap
 - [x] Inference
@@ -11,7 +11,7 @@ Abstract: *3D scene generation has quickly become a challenging new research dir
 - [x] Benchmark
 
 ## Getting Started
-Use the `environment.yml` file to create a Conda environment with all requirements for this project.
+Use the `environment.yml` file to create a Conda environment with all requirements.
 
 ## Inference
 
@@ -37,7 +37,7 @@ To run a 360-degree hallucination, it is recommened to use a GPU with at least 1
 
 ### Dataset Setup
 
-To train the depth completion network from a fine-tuned ZoeDepth model, we need to generate some data first. First, we predict depth for [NYU Depth v2](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html) with [Marigold](https://github.com/prs-eth/Marigold). Second, we use Marigold again to predict the depth for [Places365](http://places2.csail.mit.edu/) (original). Third, we use the depth maps for Places365 to generate inpainting masks.
+To train the depth completion network from a fine-tuned ZoeDepth model, we need to generate some data first. First, predict depth for [NYU Depth v2](https://cs.nyu.edu/~fergus/datasets/nyu_depth_v2.html) with [Marigold](https://github.com/prs-eth/Marigold). Second, use Marigold again to predict the depth for [Places365](http://places2.csail.mit.edu/) (original). Third, use the depth maps for Places365 to generate inpainting masks.
 
 Places365 can be used as-is. For NYU Depth v2, please follow the instructions [here](https://github.com/cleinc/bts/tree/master/pytorch#nyu-depvh-v2) to obtain the `sync` folder. We also need the official splits for NYU Depth v2, which can be extracted with the script `extract_official_train_test_set_from_mat.py` provided [here](https://github.com/wl-zhao/VPD/blob/main/depth/extract_official_train_test_set_from_mat.py):
 
@@ -46,9 +46,11 @@ wget http://horatio.cs.nyu.edu/mit/silberman/nyu_depth_v2/nyu_depth_v2_labeled.m
 python extract_official_train_test_set_from_mat.py nyu_depth_v2_labeled.mat splits.mat ./nyu_depth_v2/official_splits/
 ```
 
-Next, please update the paths in `predict_nyu_marigold.py`, `predict_places_marigold.py`, and `project_places_depth_preds.py`. Then run these files in this sequence. These scripts are equipped with `submitit` to be distributed across a SLURM cluster. If possible, we strongly suggest parallelizing the workload.
+Next, update the paths in `predict_nyu_marigold.py`, `predict_places_marigold.py`, and `project_places_depth_preds.py`. Then run these files in this sequence. These scripts are equipped with `submitit` to be distributed across a SLURM cluster. If possible, we strongly suggest parallelizing the workload.
 
-Finally, make sure to update the paths in `zoedepth/utils/config.py:96-175`. All done!
+Finally, make sure to update the paths in `zoedepth/utils/config.py:96-175`. 
+
+All done!
 
 ### Training the Model
 
@@ -62,9 +64,9 @@ Consider using the `_latest.pt` as opposed to the `_best.pt` checkpoint.
 
 ## Benchmark
 
-Our scene geometry evaluation benchmark is an approach to quantitatively compare the consistency of generated scenes. In this section, we describe how to obtain and process the datasets we used, and how to run the evaluation itself.
+This scene geometry evaluation benchmark is an approach to quantitatively compare the consistency of generated scenes. In this section, we describe how to obtain and process the datasets used, and how to run the evaluation itself.
 
-In this short write-up, the datasets will be placed in a `datasets` folder at the root of this repository. However, this path can be adapted easily.
+The datasets are placed in a `datasets` folder at the root of the repository. However, this path can be adapted.
 
 ### ScanNet
 
@@ -131,5 +133,4 @@ Adapting these scripts to your own model is straight forward: In `scannet_eval.p
 
 ## Acknowledgments
 
-
-Without the great works from previous researchers, this project would not have been possible. Thank you! Our code for the depth completion network heavily borrows from [ZoeDepth](https://github.com/isl-org/ZoeDepth). We utilize [PyTorch3D](https://pytorch3d.org) in our 3D scene generation pipeline.
+Without the great works from various researchers at Oxford, University of Liverpool, and this would not have been completed. Thank you! The code for the depth completion network heavily borrows from [ZoeDepth](https://github.com/isl-org/ZoeDepth). We utilize [PyTorch3D](https://pytorch3d.org) in our 3D scene generation pipeline.
