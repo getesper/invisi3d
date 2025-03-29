@@ -1,4 +1,4 @@
-# Gld8tr-3dvision: Generating 3D Scenes from single image
+# Gld8tr-3dcn: Generating 3D Scenes from single image
 
 This repository contains the code to train the depth completion network, generate 3D scenes, and run the scene geometry evaluation benchmark 
 
