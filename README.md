@@ -1,6 +1,4 @@
-# Invisi3d: Generating 3D Scenes and Depth
-
-![Method figure](.github/paper_projection_figure_stacked.jpg)
+# Gld8tr-Invisi3d: Generating 3D Scenes from single image
 
 This repository contains the code to train the depth completion network, generate 3D scenes, and run the scene geometry evaluation benchmark 
 
@@ -14,11 +12,6 @@ Abstract: *3D scene generation has quickly become a challenging new research dir
 
 ## Getting Started
 Use the `environment.yml` file to create a Conda environment with all requirements for this project.
-
-```
-conda env create -n invisible_stitch --file environment.yml
-conda activate invisible_stitch
-```
 
 ## Inference
 
