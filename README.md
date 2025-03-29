@@ -1,10 +1,8 @@
-# Invisible Stitch: Generating Smooth 3D Scenes with Depth Inpainting
-Paul Engstler, Andrea Vedaldi, Iro Laina, Christian Rupprecht<br>
-[Project Page](https://research.paulengstler.com/invisible-stitch) | [🤗 Demo](https://huggingface.co/spaces/paulengstler/invisible-stitch) | [Paper](https://arxiv.org/abs/2404.19758)<br>
+# Invisi3d: Generating 3D Scenes and Depth
 
 ![Method figure](.github/paper_projection_figure_stacked.jpg)
 
-This repository contains the code to train the depth completion network, generate 3D scenes, and run the scene geometry evaluation benchmark as presented in the paper "Invisible Stitch: Generating Smooth 3D Scenes with Depth Inpainting".
+This repository contains the code to train the depth completion network, generate 3D scenes, and run the scene geometry evaluation benchmark 
 
 Abstract: *3D scene generation has quickly become a challenging new research direction, fueled by consistent improvements of 2D generative diffusion models. Most prior work in this area generates scenes by iteratively stitching newly generated frames with existing geometry.  These works often depend on pre-trained monocular depth estimators to lift the generated images into 3D, fusing them with the existing scene representation. These approaches are then often evaluated via a text metric, measuring the similarity between the generated images and a given text prompt. In this work, we make two fundamental contributions to the field of 3D scene generation. First, we note that lifting images to 3D with a monocular depth estimation model is suboptimal as it ignores the geometry of the existing scene. We thus introduce a novel depth completion model, trained via teacher distillation and self-training to learn the 3D fusion process, resulting in improved geometric coherence of the scene. Second, we introduce a new benchmarking scheme for scene generation methods that is based on ground truth geometry, and thus measures the quality of the structure of the scene.*
 
@@ -21,8 +19,6 @@ Use the `environment.yml` file to create a Conda environment with all requiremen
 conda env create -n invisible_stitch --file environment.yml
 conda activate invisible_stitch
 ```
-
-By default, the pre-trained checkpoint of our depth completion model will be downloaded automatically from Hugging Face. If you prefer to download it manually, find the model [here](https://huggingface.co/paulengstler/invisible-stitch) and adapt the `run.py` script(s).
 
 ## Inference
 
@@ -140,19 +136,7 @@ python3 hypersim_concat_eval.py ./datasets/hypersim/results_invisible_stitch
 
 Adapting these scripts to your own model is straight forward: In `scannet_eval.py`, add a new mode for your model (see lines `372-384`). In `hypersim_eval.py`, duplicate the error computation for an existing model and adapt it to your own (see lines `411-441`).
 
-## Citation
-```
-@inproceedings{
-    engstler2024invisible,
-    title={Invisible Stitch: Generating Smooth 3D Scenes with Depth Inpainting}
-    author={Paul Engstler and Andrea Vedaldi and Iro Laina and Christian Rupprecht}
-    year={2024}
-    booktitle={Arxiv}
-}
-```
-
 ## Acknowledgments
 
-P. E., A. V., I. L., and C.R. are supported by ERC-UNION-CoG-101001212. P.E. is also supported by Meta Research. I.L. and C.R. also receive support from VisualAI EP/T028572/1.
 
 Without the great works from previous researchers, this project would not have been possible. Thank you! Our code for the depth completion network heavily borrows from [ZoeDepth](https://github.com/isl-org/ZoeDepth). We utilize [PyTorch3D](https://pytorch3d.org) in our 3D scene generation pipeline.
